@@ -4,6 +4,17 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>Kirilg.$(AssemblyName)</PackageId>
+    <Authors>kirilg</Authors>
+    <Version>1.0.0</Version>
+    <Product>Kirilg's TRPG Dice Roller</Product>
+    <Copyright></Copyright>
+    <RepositoryUrl>https://github.com/exkirilg/TRPG.DiceRoller</RepositoryUrl>
+    <RepositoryType>github</RepositoryType>
+    <Description>A simple dice roller library for tabletop role-playing games</Description>
+    <PackageTags>dice, trpg</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <ErrorReport>send</ErrorReport>
   </PropertyGroup>
 
 </Project>
