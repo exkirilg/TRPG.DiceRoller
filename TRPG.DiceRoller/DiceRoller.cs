@@ -24,4 +24,22 @@ public class DiceRoller
 
         return new DicePoolRollResult(rolls);
     }
+
+    public SuccessRate CalculateSuccessRate(Dice dice, Func<int, bool> predicate)
+    {
+        double possibleOutcomes = dice.NumberOfSides;
+        double desiredOutcomes = dice.SidesAsIntArray.Where(predicate).Count();
+
+        return new(desiredOutcomes/possibleOutcomes);
+    }
+
+    public SuccessRate CalculateSuccessRate(DicePool dicePool, Func<int, bool> predicate)
+    {
+        double result = 1;
+
+        foreach (var dice in dicePool)
+            result *= CalculateSuccessRate(dice, predicate).Value;
+
+        return new(result);
+    }
 }

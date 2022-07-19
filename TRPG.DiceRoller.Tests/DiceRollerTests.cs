@@ -56,6 +56,22 @@ public class DiceRollerTests
             }
         }
     };
+    public static IEnumerable<object[]> CalculateSuccessRate_DiceRoll_TestData => new List<object[]>()
+    {
+        new object[] { new D4(), new Func<int, bool>(x => x >= 3), new SuccessRate(0.5)},
+        new object[] { new D6(), new Func<int, bool>(x => x >= 5), new SuccessRate(0.3333) },
+        new object[] { new D8(), new Func<int, bool>(x => x == 6 || x == 7 || x == 8), new SuccessRate(0.375) },
+        new object[] { new D10(), new Func<int, bool>(x => x > 5), new SuccessRate(0.5) },
+        new object[] { new D12(), new Func<int, bool>(x => x == 13), new SuccessRate(0) },
+        new object[] { new D20(), new Func<int, bool>(x => (x > 10 && x <= 15) || x == 20), new SuccessRate(0.3) },
+        new object[] { new D100(), new Func<int, bool>(x => x < 45), new SuccessRate(0.44) }
+    };
+    public static IEnumerable<object[]> CalculateSuccessRate_DicePool_TestData => new List<object[]>()
+    {
+        new object[] { new DicePool(new D8(), new D4(), new D6()), new Func<int, bool>(x => x > 3), new SuccessRate(0.0781) },
+        new object[] { new DicePool(new D6(), new D6()), new Func<int, bool>(x => x == 6), new SuccessRate(0.0278) },
+        new object[] { new DicePool(new D20(), new D20(), new D20()), new Func<int, bool>(x => x == 19 || x == 20), new SuccessRate(0.001) }
+    };
 
     public DiceRollerTests()
     {
@@ -143,5 +159,21 @@ public class DiceRollerTests
             Assert.Equal(i, roll.LowestRemoved.Length);
             Assert.Contains(lowest!.Value, roll.LowestRemoved.Select(r => r.Value).ToArray());
         }
+    }
+
+    [Theory]
+    [MemberData(nameof(CalculateSuccessRate_DiceRoll_TestData))]
+    public void CalculateSuccessRate_DiceRoll(Dice dice, Func<int, bool> predicate, SuccessRate expected)
+    {
+        var successRate = _diceRoller.CalculateSuccessRate(dice, predicate);
+        Assert.Equal(expected, successRate);
+    }
+
+    [Theory]
+    [MemberData(nameof(CalculateSuccessRate_DicePool_TestData))]
+    public void CalculateSuccessRate_DicePool(DicePool dicePool, Func<int, bool> predicate, SuccessRate expected)
+    {
+        var successRate = _diceRoller.CalculateSuccessRate(dicePool, predicate);
+        Assert.Equal(expected, successRate);
     }
 }
