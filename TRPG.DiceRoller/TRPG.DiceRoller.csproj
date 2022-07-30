@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <PackageId>Kirilg.$(AssemblyName)</PackageId>
     <Authors>kirilg</Authors>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
     <Product>Kirilg's TRPG Dice Roller</Product>
     <Copyright></Copyright>
     <RepositoryUrl>https://github.com/exkirilg/TRPG.DiceRoller</RepositoryUrl>
