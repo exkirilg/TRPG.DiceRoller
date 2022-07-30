@@ -5,3 +5,4 @@ global using TRPG.DiceRoller.RollsResults;
 
 global using TRPG.DiceRoller.Dices;
 global using TRPG.DiceRoller.Dices.Abstract;
+global using TRPG.DiceRoller.Dices.DicesByNumberOfSides;

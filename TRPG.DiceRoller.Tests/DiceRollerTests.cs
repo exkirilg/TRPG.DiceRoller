@@ -56,6 +56,56 @@ public class DiceRollerTests
             }
         }
     };
+    public static IEnumerable<object[]> RollDicePoolByExpression_TestData => new List<object[]>
+    {
+        new object[]
+        {
+            "/rolld10/5d6/2d20",
+            new DicePoolRollResult(
+                new DiceRollResult[]
+                {
+                    new(new D10(), 10),
+                    new(new D6(), 6),
+                    new(new D6(), 6),
+                    new(new D6(), 6),
+                    new(new D6(), 6),
+                    new(new D6(), 6),
+                    new(new D20(), 20),
+                    new(new D20(), 20)
+                }
+            )
+        },
+        new object[]
+        {
+            "/roll 3d4",
+            new DicePoolRollResult(
+                new DiceRollResult[]
+                {
+                    new(new D4(), 4),
+                    new(new D4(), 4),
+                    new(new D4(), 4)
+                }
+            )
+        },
+        new object[]
+        {
+            "6d6 / 1D8 / 2D10",
+            new DicePoolRollResult(
+                new DiceRollResult[]
+                {
+                    new(new D6(), 6),
+                    new(new D6(), 6),
+                    new(new D6(), 6),
+                    new(new D6(), 6),
+                    new(new D6(), 6),
+                    new(new D6(), 6),
+                    new(new D8(), 8),
+                    new(new D10(), 10),
+                    new(new D10(), 10)
+                }
+            )
+        },
+    };
     public static IEnumerable<object[]> CalculateSuccessRate_DiceRoll_TestData => new List<object[]>()
     {
         new object[] { new D4(), new Func<int, bool>(x => x >= 3), new SuccessRate(0.5)},
@@ -159,6 +209,25 @@ public class DiceRollerTests
             Assert.Equal(i, roll.LowestRemoved.Length);
             Assert.Contains(lowest!.Value, roll.LowestRemoved.Select(r => r.Value).ToArray());
         }
+    }
+
+    [Theory]
+    [MemberData(nameof(RollDicePoolByExpression_TestData))]
+    public void RollDicePoolByExpression(string expression, DicePoolRollResult expected)
+    {
+        var result = _diceRoller.RollDicePoolByExpression(expression);
+
+        Assert.True(Enumerable.SequenceEqual(expected.Results, result.Results));
+    }
+
+    [Theory]
+    [InlineData("/roll 2d77")]
+    [InlineData("10D5")]
+    [InlineData("")]
+    [InlineData(null)]
+    public void RollDicePoolByExpression_ThrowsArgumentException(string expression)
+    {
+        Assert.Throws<ArgumentException>(() => _diceRoller.RollDicePoolByExpression(expression));
     }
 
     [Theory]
