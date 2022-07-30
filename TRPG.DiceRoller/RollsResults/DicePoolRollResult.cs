@@ -51,18 +51,24 @@ public class DicePoolRollResult
 
     private void OnChanged()
     {
-        HighestRemoved = Array.Empty<DiceRollResult>();
-        LowestRemoved = Array.Empty<DiceRollResult>();
+        Results = OriginalResults
+            .OrderBy(r => r.Value)
+            .ToArray();
 
-        Results = OriginalResults.OrderBy(r => r.Value).ToArray();
+        HighestRemoved = Results
+            .TakeLast(NumberOfHighestRemoved)
+            .OrderBy(r => r.Id)
+            .ToArray();
 
-        HighestRemoved = Results.TakeLast(NumberOfHighestRemoved).ToArray();
-        LowestRemoved = Results.Take(NumberOfLowestRemoved).ToArray();
+        LowestRemoved = Results
+            .Take(NumberOfLowestRemoved)
+            .OrderBy(r => r.Id)
+            .ToArray();
 
         Results = Results
             .Skip(NumberOfLowestRemoved)
             .SkipLast(NumberOfHighestRemoved)
-            .OrderBy(r => r)
+            .OrderBy(r => r.Id)
             .ToArray();
 
         Sum = Results.Sum(r => r.Value);
