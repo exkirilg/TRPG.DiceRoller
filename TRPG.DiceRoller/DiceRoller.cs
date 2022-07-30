@@ -11,18 +11,13 @@ public class DiceRoller
         _randomIntAdapter = randomIntAdapter;
     }
 
-    public DiceRollResult RollDice(Dice dice)
-    {
-        return new DiceRollResult(
-            dice,
-            _randomIntAdapter.GetRandomPositiveNumberAboveZeroInRange(dice.NumberOfSides));
-    }
+    public DiceRollResult RollDice(Dice dice) => RollSingleDice(dice);
 
     public DicePoolRollResult RollDicePool(DicePool dicePool)
     {
         var rolls = new DiceRollResult[dicePool.Count];
         for (int i = 0; i < dicePool.Count; i++)
-            rolls[i] = RollDice(dicePool[i]);
+            rolls[i] = RollSingleDice(dicePool[i], i + 1);
 
         return new DicePoolRollResult(rolls);
     }
@@ -79,5 +74,13 @@ public class DiceRoller
             result *= CalculateSuccessRate(dice, predicate).Value;
 
         return new(result);
+    }
+
+    private DiceRollResult RollSingleDice(Dice dice, int id = 1)
+    {
+        return new DiceRollResult(
+            id,
+            dice,
+            _randomIntAdapter.GetRandomPositiveNumberAboveZeroInRange(dice.NumberOfSides));
     }
 }

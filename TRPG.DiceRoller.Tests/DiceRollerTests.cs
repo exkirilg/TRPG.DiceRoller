@@ -64,14 +64,14 @@ public class DiceRollerTests
             new DicePoolRollResult(
                 new DiceRollResult[]
                 {
-                    new(new D10(), 10),
-                    new(new D6(), 6),
-                    new(new D6(), 6),
-                    new(new D6(), 6),
-                    new(new D6(), 6),
-                    new(new D6(), 6),
-                    new(new D20(), 20),
-                    new(new D20(), 20)
+                    new(1, new D10(), 10),
+                    new(2, new D6(), 6),
+                    new(3, new D6(), 6),
+                    new(4, new D6(), 6),
+                    new(5, new D6(), 6),
+                    new(6, new D6(), 6),
+                    new(7, new D20(), 20),
+                    new(8, new D20(), 20)
                 }
             )
         },
@@ -81,9 +81,9 @@ public class DiceRollerTests
             new DicePoolRollResult(
                 new DiceRollResult[]
                 {
-                    new(new D4(), 4),
-                    new(new D4(), 4),
-                    new(new D4(), 4)
+                    new(1, new D4(), 4),
+                    new(2, new D4(), 4),
+                    new(3, new D4(), 4)
                 }
             )
         },
@@ -93,15 +93,15 @@ public class DiceRollerTests
             new DicePoolRollResult(
                 new DiceRollResult[]
                 {
-                    new(new D6(), 6),
-                    new(new D6(), 6),
-                    new(new D6(), 6),
-                    new(new D6(), 6),
-                    new(new D6(), 6),
-                    new(new D6(), 6),
-                    new(new D8(), 8),
-                    new(new D10(), 10),
-                    new(new D10(), 10)
+                    new(1, new D6(), 6),
+                    new(2, new D6(), 6),
+                    new(3, new D6(), 6),
+                    new(4, new D6(), 6),
+                    new(5, new D6(), 6),
+                    new(6, new D6(), 6),
+                    new(7, new D8(), 8),
+                    new(8, new D10(), 10),
+                    new(9,  new D10(), 10)
                 }
             )
         },
@@ -168,6 +168,12 @@ public class DiceRollerTests
         Assert.Equal(dices.Sum(d => d.NumberOfSides), roll.Sum);
         Assert.Equal(dices.MaxBy(d => d.NumberOfSides)?.NumberOfSides, roll.HighestResult?.Value);
         Assert.Equal(dices.MinBy(d => d.NumberOfSides)?.NumberOfSides, roll.LowestResult?.Value);
+
+        for (int i = 0; i < dices.Length; i++)
+        {
+            Assert.Equal(i + 1, roll.Results[i].Id);
+            Assert.Equal(dices[i], roll.Results[i].Dice);
+        }
     }
 
     [Theory]
